@@ -1,0 +1,49 @@
+#home {
+	background-color:rgb(28,73, 107, 0.75);
+	font-family:serif;
+}
+
+header h4 { 
+	text-align:right;
+	font-family: Times;
+	font-size:20px;
+}
+
+h3 {
+	text-align:center; 
+	font-size:24px;
+}
+
+#stripe{
+	margin: auto;
+	display:inline-block;
+}
+
+div { 
+	text-align: center; 
+}
+
+#diskview{
+	height:200px;
+	width:500px;
+	border:1px solid black;
+}
+
+article h4 { 
+	text-align:left;
+	font-size:14px;
+}
+
+#FAT { 
+	height:200px;
+	width:500px;
+	border:1px solid black;
+}
+
+ol { 
+	text-align:left;
+}
+
+ul {
+	text-align:left;
+}

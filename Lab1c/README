@@ -1,0 +1,61 @@
+CS111: Operating System Principles
+Winter 2016, Eggert
+Lab 1C - Simpleton Shell
+
+Anderson Huang
+Marvin McClain 
+
+Our implementation of Simpleton Shell assumes that the user correctly specifies
+arguments for the options and subcommand options. If the user does not, program 
+behavior may or may not result in correct results; however, appropiate diagnostic messages
+will be sent to the terminal to notify the user of the errors they made. 
+
+A noticeable error occurs when you give the command ls -ail as a subcommand to ./simpsh. 
+This will cause it to output the line "Invalid option: Sucess". This is a byproduct of the parsing
+done by getopt_long, and not so much the program. The program still succeeds by all means, 
+but the message printed to stderr is invalid. The parsing reads over -ail multiple times, 
+which results in an error. This is a shortcoming of our implementation of Simpsh.
+** Our program handles subcommand options that are passed with one dash right sometimes, and wrong other times ** 
+** To ensure correct behavior, pass these subcommand options with separate dashes for each option ** 
+
+Another feature is that when not enough file streams are passed to the --command option, 
+an error message will be printed (to standard error), but program execution, again, 
+proceeds. If invalid file streams are passed, diagnostic messages will also be printed. 
+In short, Simpleton Shell expects users to be familiar with the syntax. Program behavior
+will not be as expected if incorrect syntax is used. 
+
+Lastly, for miscellaneous options, the following test case goes into an infinite loop.
+For the --profile option, two specific measures are outputted: user time and system time. 
+These times depend on what options are specified 
+	1) subcommand with no --wait option - only the parent process's time will be reported 
+	2) subcommand with --wait option: parents process's will be reported, and all children processes's
+	time (sum) will be reported after --wait is done waiting for all processes to finish
+	3) --creat, --rsync, and similar file-opening options are treated separately from --rdonly, --wronly, --rdwr
+
+In almost all cases, the parent process will be reported as having 0.000000 seconds of user and system
+time. Only when subcommands and --wait are specified will the user and system time be significant. 
+When --profile and --wait are used in conjunction, the user time and system time printed in the terminal 
+after completion of subcommands is the sum of the time it took to complete all of them. Equivalently, 
+this is the time spent by all the children of the calling process. We assume that all other commands spend 
+relatively little time (e.g. the file-opening flags and options) operating, which is reasonable. 
+
+Testing: 
+make creates the executable simpsh.
+Note: make check will not work unless make is executed beforehand.
+make check will use a script to test several shell commands on the simpleton shell program
+make dist will perform make check and make sure that the output is correct. 
+make dist should not output anything after diff -u a.txt c.txt
+make clean clears the directory except for the files simpsh.c Makefile README test.sh bench-simpsh.sh bench-bash.sh bench-exec.sh BenchmarkReport.pdf 
+** Comparison of Simpsh, bash, and execline ** 
+Testing is done on 100 MB files created by the following command. 
+
+base64 /dev/urandom | head -c 100000000 > filename 
+
+Equivalently, files were also created using /dev/zero. To aid in testing and benchmarking, included in this
+distribution of Simpsh are three shell scripts to test each shell. They are described aptly as follows: 
+	bench-simpsh.sh 
+	bench-bash.sh
+	bench-exec.sh
+
+
+

@@ -1,0 +1,60 @@
+Benchmark 1A
+
+real	  0m2.259s
+user	  0m0.494s
+sys	  0m0.183s
+
+real	  0m3.861s
+user	  0m6.300s
+sys	  0m0.198s
+Benchmark 1B
+
+real	  0m2.479s
+user	  0m0.594s
+sys	  0m0.359s
+
+real	  0m3.296s
+user	  0m6.380s
+sys	  0m0.426s
+Benchmark 1C
+
+real	  0m0.386s
+user	  0m0.327s
+sys	  0m0.033s
+
+real	  0m2.745s
+user	  0m0.482s
+sys	  0m0.118s
+Benchmark 2A
+
+real	  0m3.242s
+user	  0m1.325s
+sys	  0m0.137s
+
+real	  0m2.639s
+user	  0m0.441s
+sys	  0m0.121s
+Benchmark 2B/C
+
+real	  0m3.239s
+user	  0m0.721s
+sys	  0m0.151s
+
+real	  0m12.496s
+user	  0m6.866s
+sys	  0m0.312s
+Benchmark 3A/B/C
+
+real	  0m15.419s
+user	  0m13.852s
+sys	  0m0.106s
+
+real	  0m8.013s
+user	  0m6.293s
+sys	  0m0.129s
+junk.txt
+
+real	0m8.060s
+user	0m6.467s
+sys	0m0.258s
+

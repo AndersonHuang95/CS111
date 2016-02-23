@@ -1,0 +1,124 @@
+User time: 0.000000s	System time: 0.000627s
+User time: 0.000000s	System time: 0.000657s
+User time: 0.000000s	System time: 0.000717s
+User time: 0.000000s	System time: 0.000785s
+User time: 0.000000s	System time: 0.000818s
+User time: 0.000000s	System time: 0.000887s
+0 sort 
+User time: 0.468126s	System time: 0.183798s
+User time: 0.000857s	System time: 0.000000s
+User time: 0.000896s	System time: 0.000000s
+User time: 0.000945s	System time: 0.000000s
+User time: 0.001008s	System time: 0.000000s
+User time: 0.001035s	System time: 0.000000s
+User time: 0.001125s	System time: 0.000000s
+0 sort 
+User time: 6.298776s	System time: 0.179563s
+User time: 0.000000s	System time: 0.000611s
+User time: 0.000000s	System time: 0.000644s
+User time: 0.000000s	System time: 0.000700s
+User time: 0.000000s	System time: 0.000721s
+User time: 0.000000s	System time: 0.000725s
+User time: 0.000000s	System time: 0.000774s
+User time: 0.000000s	System time: 0.000801s
+User time: 0.000000s	System time: 0.000892s
+User time: 0.000000s	System time: 0.000948s
+User time: 0.000000s	System time: 0.001013s
+0 sort 
+0 tr A-Z a-z 
+0 cat - 
+User time: 0.595884s	System time: 0.331151s
+User time: 0.000000s	System time: 0.000603s
+User time: 0.000000s	System time: 0.000632s
+User time: 0.000000s	System time: 0.000686s
+User time: 0.000000s	System time: 0.000709s
+User time: 0.000000s	System time: 0.000713s
+User time: 0.000000s	System time: 0.000789s
+User time: 0.000000s	System time: 0.000836s
+User time: 0.000000s	System time: 0.000929s
+User time: 0.000000s	System time: 0.001001s
+User time: 0.000000s	System time: 0.001066s
+0 tr A-Z a-z 
+0 sort 
+0 cat - 
+User time: 7.474469s	System time: 0.431319s
+User time: 0.000000s	System time: 0.000665s
+User time: 0.000000s	System time: 0.000699s
+User time: 0.000000s	System time: 0.000756s
+User time: 0.000000s	System time: 0.000810s
+User time: 0.000000s	System time: 0.000852s
+User time: 0.000000s	System time: 0.000922s
+0 uniq -u 
+User time: 0.329311s	System time: 0.020956s
+User time: 0.000000s	System time: 0.000636s
+User time: 0.000000s	System time: 0.000663s
+User time: 0.000000s	System time: 0.000718s
+User time: 0.000000s	System time: 0.000806s
+User time: 0.000000s	System time: 0.000852s
+User time: 0.000000s	System time: 0.000944s
+0 uniq -u 
+User time: 0.472374s	System time: 0.068356s
+User time: 0.000000s	System time: 0.000689s
+User time: 0.000000s	System time: 0.000732s
+User time: 0.000000s	System time: 0.000778s
+User time: 0.000000s	System time: 0.000839s
+User time: 0.000000s	System time: 0.000866s
+User time: 0.000000s	System time: 0.000946s
+0 sed s/a*b//g 
+User time: 1.025417s	System time: 0.083277s
+User time: 0.000000s	System time: 0.000634s
+User time: 0.000000s	System time: 0.000665s
+User time: 0.000000s	System time: 0.000724s
+User time: 0.000000s	System time: 0.000781s
+User time: 0.000000s	System time: 0.000810s
+User time: 0.000000s	System time: 0.000884s
+0 sed /^z$/d 
+User time: 0.412220s	System time: 0.084839s
+User time: 0.000000s	System time: 0.000836s
+User time: 0.000000s	System time: 0.000957s
+User time: 0.000000s	System time: 0.001025s
+User time: 0.000000s	System time: 0.001068s
+User time: 0.000000s	System time: 0.001114s
+User time: 0.000000s	System time: 0.001141s
+User time: 0.000000s	System time: 0.001215s
+0 comm sortjunk.txt sortjunk2.txt 
+User time: 0.698157s	System time: 0.113324s
+User time: 0.000643s	System time: 0.000000s
+User time: 0.000673s	System time: 0.000000s
+User time: 0.000713s	System time: 0.000000s
+User time: 0.000713s	System time: 0.000386s
+User time: 0.000713s	System time: 0.000386s
+User time: 0.000713s	System time: 0.000386s
+User time: 0.000713s	System time: 0.000386s
+1 diff junk.txt junk2.txt 
+User time: 6.859971s	System time: 0.269706s
+User time: 0.000000s	System time: 0.000837s
+User time: 0.000000s	System time: 0.000873s
+User time: 0.000000s	System time: 0.000918s
+User time: 0.000000s	System time: 0.000930s
+User time: 0.000000s	System time: 0.000932s
+User time: 0.000000s	System time: 0.008106s
+User time: 0.000000s	System time: 0.008139s
+User time: 0.000000s	System time: 0.008231s
+0 bzip2 -9 -c junk.txt 
+User time: 13.979382s	System time: 0.085057s
+User time: 0.000000s	System time: 0.000625s
+User time: 0.000000s	System time: 0.000657s
+User time: 0.000000s	System time: 0.000720s
+User time: 0.000000s	System time: 0.000731s
+User time: 0.000000s	System time: 0.000733s
+User time: 0.000000s	System time: 0.007956s
+User time: 0.000000s	System time: 0.007994s
+User time: 0.000000s	System time: 0.008071s
+0 gzip -9 -c junk.txt 
+User time: 6.303122s	System time: 0.126982s
+User time: 0.000000s	System time: 0.000817s
+User time: 0.000000s	System time: 0.000846s
+User time: 0.000000s	System time: 0.000887s
+User time: 0.000000s	System time: 0.000895s
+User time: 0.000000s	System time: 0.000898s
+User time: 0.000000s	System time: 0.008415s
+User time: 0.000000s	System time: 0.008448s
+User time: 0.000000s	System time: 0.008510s
+0 tar -c -z -v -f junk.tgz junk.txt 
+User time: 6.411274s	System time: 0.287934s

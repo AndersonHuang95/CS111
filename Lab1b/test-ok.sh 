@@ -1,0 +1,9 @@
+#! /bin/bash
+
+# CS111 Lab1b test cases 
+
+gcc -o simpsh simpsh.c || echo "Program could not be compiled." 
+
+#1: Test file-opening flags 
+
+./simpsh --creat --rdonly || exit

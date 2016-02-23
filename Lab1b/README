@@ -1,0 +1,39 @@
+CS111: Operating System Principles
+Winter 2016, Eggert
+Lab 1B - Simpleton Shell
+
+Anderson Huang
+Marvin McClain 
+
+Our implementation of Simpleton Shell assumes that the user correctly specifies
+arguments for the options and subcommand options. If the user does not, program 
+behavior may or may not result in correct results; however, appropiate diagnostic messages
+will be sent to the terminal to notify the user of the errors they made. 
+
+A noticeable error occurs when you give the command ls -ail as a subcommand to ./simpsh. 
+This will cause it to output the line "Invalid option: Sucess". This is a byproduct of the parsing
+done by getopt_long, and not so much the program. The program still succeeds by all means, 
+but the message printed to stderr is invalid. The parsing reads over -ail multiple times, 
+which results in an error. These errors should be ignored, and the user shuld know that the 
+desired behavior of the shell is attained. 
+
+Another feature is that when not enough file streams are passed to the --command option, 
+an error message will be printed (to standard error), but program execution, again, 
+proceeds. If invalid file streams are passed, diagnostic messages will also be printed. 
+In short, Simpleton Shell expects users to be familiar with the syntax. Program behavior
+will not be as expected if incorrect syntax is used. 
+
+Lastly, for miscellaneous options, the following test case goes into an infinite loop.
+
+./simpsh --ignore 11 --abort 
+
+Testing: 
+make creates the executable simpsh.
+Note: make check will not work unless make is executed beforehand.
+make check will use a script to test several shell commands on the simpleton shell program
+make dist will perform make check and make sure that the output is correct. 
+make dist should not output anything after diff -u a.txt c.txt
+make clean clears the directory except for the four files simpsh.c Makefile README and test.sh.
+
+
+

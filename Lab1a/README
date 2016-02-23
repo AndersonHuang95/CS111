@@ -1,0 +1,32 @@
+CS111: Operating System Principles
+Winter 2016, Eggert
+Lab 1A - Simpleton Shell
+
+Anderson Huang
+Marvin McClain 
+
+Our implementation of Simpleton Shell assumes that the user correctly specifies
+arguments for the --rdonly and --wronly options. If the user does not, program 
+behavior may or may not result in correct results. 
+
+Take ./simpsh --rdonly --wronly b.txt as an example. 
+--rdonly will believe that --wronly is the file to be read (which is wrong). 
+However, program execution will proceed as if a correct argument is passed (this is
+as specified by the spec). 
+
+Another feature is that when not enough file streams are passed to the --command option, 
+an error message will be printed (to standard error), but program execution, again, 
+proceeds. If invalid file streams are passed, diagnostic messages will also be printed. 
+In short, Simpleton Shell expects users to be familiar with the syntax. Program behavior
+will not be as expected if incorrect syntax is used. 
+
+Testing: 
+make creates the executable simpsh.
+Note: make check will not work unless make is executed beforehand.
+make check will use a script to test several shell commands on the simpleton shell program
+make dist will perform make check and make sure that the output is correct. 
+make dist should not output anything after diff -u a.txt c.txt
+make clean clears the directory except for the four files simpsh.c Makefile README and test.sh.
+
+
+
