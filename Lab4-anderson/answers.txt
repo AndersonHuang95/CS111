@@ -1,0 +1,143 @@
+Part 1: Parallel Updates to Shared Variables 
+
+1.1.1) Using 3 threads and 5000 iterations per thread, the program fails consistently (~85% of the time)
+The main factor is the # of iterations, but there also needs to be more than 1 thread in order for race
+conditions to occur. The # of iterations has to be high enough that the overhead associated with pthread_create
+is not larger than the overhead of completing the total # of adds/subtracts for one thread. 
+
+1.1.2) Small numbers of iterations are not effective enough in incurring a significant overhead for the 
+adding function. That is, the small number of iterations can be completed before the next thread in the program
+is created and ready to run. The overhead in creating a thread is much higher than a single machine instruction. 
+
+*********
+
+1.2.1) The average cost drops because when there are more iterations, less time is spent creating threads (which is a much more expensive operation than simple machine instructions such 
+as adding one to a variable), and more can be spent doing useful work. When the iterations are
+small, a lot of the CPU time is spent creating threads. 
+
+1.2.2) The correct cost per operation can be calculated if we run the program single-threaded. In
+this manner, no overhead is incurred by creating threads, and the runtime is simply comprised of 
+the process doing useful work. 
+
+1.2.3) From the documentation of pthread_yield, pthread_yield() causes the calling thread to relinquish the CPU.  The thread is placed at the end of the run queue for its static priority and another thread is scheduled to run. When pthread_yield is called, a context switch must occur
+on a core on the CPU, and another thread has to be set up to run. The extra time is due to all 
+the context switches and drop-downs into the kernel scheduler. 
+
+1.2.4) The timings for the --yield option are not valid because they factor in the cost of context switches. If one can find a way to subtract out all the context switching, then the times
+would be correct. 
+
+**********
+
+1.3.1) For a small number of threads, race conditions are limited because there is not an excessive need to context switch, and the chance of threads colliding is much lower than when
+there are more threads. For a small number of threads AND small number of iterations, the threads can finish updating the shared variable before the next thread is finished being created. 
+This eliminates most race conditions. However, as thread number and iteration count increase, the cost per operation increases significantly. 
+
+1.3.2) As the number of threads rise, the chances of race conditions increases. In essence, they form a queue, each waiting for a chance at the critical section. More and more threads pile up
+and have to wait its turn, resulting in a huge bottleneck for the application. 
+
+1.3.3) For a large number of threads, spinlocks are very expensive, because they poll as they wait for the lock. That is, spinlocks are busy-waiting in direct contrast to mutexes which block. 
+In the implementation of a spinlock, the thread continuously checks to see if the lock has been unlocked in a loop; as more threads are used, more CPU time is chewed up doing this "useless work". 
+Contrast this with the mutex, which blocks and forms a queue of threads. The threads do not continuously check in this case, but are woken up whenever the thread that has the lock unlocks. 
+
+**********************************************************************
+
+Part 2: Parallel Updates to complex data structures 
+
+2.1) The sorted list has quite a different relationship between avg. cost per operation vs. number of iterations. For 10 iterations, the average cost is
+around 1500 nanoseconds per operation. However, once this number increases to 100, it drops to around 30 nanoseconds. Further increasing iterations stagnates
+the average cost at around 10 nanoseconds per operation. This trend can be attributed to the fact that thread creation is the bottlenck for small numbers of 
+operations. That is, creating a thread takes a lot longer than inserting, looking up, and deleting 10 elements. Once this number gets high enough, we can safely 
+assume that the main source of CPU time comes from sorting and deleting the list. To correct this, we have to somehow subtract out the thread creation time. 
+
+When ./sltest is run with --yield=i, --yield=d, --yield=is, or --yield=id, the program correctly crashes due to segmentation faults (there are race conditions present). 
+
+**********
+
+2.2.2) For Part 1, I ran the synchronized program(s) with ~50000 iterations, whereas for Part 2, I ran the synchronized programs with ~2000 iterations. To make these two numbers scalable, I rescaled
+Part 1's iterations to 2000, with 10 threads. Below are some sample numbers. 
+
+Part 1, --iterations=2000 --threads=10
+
+sync=m: Elapsed time: 349640664 ns
+		Average time per operation: 8741 ns
+
+sync=s: Elapsed time: 181695969 ns
+		Average time per operation: 4542 ns
+
+
+Part 2, --iterations=2000, --threads=10
+
+sync=m: Elapsed time: 3612333056 ns
+		Average time per operation: 90 ns
+
+sync=s: Elapsed time: 2851554560 ns
+		Average time per operation: 71 ns
+
+There is an obvious discrepancy between the average time per operation for Part 1 and Part 2. This
+can be explained through the elapsed time. The elapsed time for comparable iterations and threads 
+between the two parts shows that Part 2 has , on average, a ten times greater elapsed time. However,
+the average time is still lower. For Part 1, not much useful work is being done! The only useful work is adding and subtracting one, 
+so those are the only operations counted in the calculation in the test driver. For Part 2, there are many operations being counted. 
+Each insert must factor in the average case of when the insert function must search through, on average, 50 items. This also is true for the
+lookup function. These significantly increase the number of operations that are counted and reduce the overall average time per operation. 
+
+*********
+
+2.3.1) For ratios of threads:lists smaller than 1, the performance is very good. For ratios of threads:lists
+greater than 1, the perfromance gradually deterioriates. This can be attributed to the way the 
+test driver is designed around lists. Each list is given a separate head and synchronization objects. 
+When there are more lists than threads, race conditions will be less prevalent, because more 
+times than not, each thread will be writing to a different list and thus will be using different
+sychronization objects. This can be somewhat guaranteed because the keys in each element were
+random to begin with. In contrast, when threads exceed lists, it takes only common sense to see that, 
+at any time, if all threads are running, more than one thread will be trying to access the same 
+list, and thus a race condition is present, and a locking mechanism will have to be used and subsequently slow down the program. The key is that locks (which are slow), do not have to be 
+used as much in scenarios where threads:lists is less than 1. 
+
+2.3.2) Threads per list is a more interesting parameter to use as it is a better measure 
+of true concurrency and parallelism in the upgraded test driver program. Threads are key to 
+improving performance, but a second, perhaps even more important factor is figuring a way to 
+minimize race conditions. This is done by creating multiple locks, and distributing items across
+lists so threads rarely step over each other. 
+
+*********
+
+Part 3: 
+
+3.1.1) The mutex must be held so that no wakeup calls are missed. For example,
+
+Process A: 								Process B: 
+
+pthread_mutex_lock(&mutex);
+while (condition == false)
+
+										condition = true; 
+										pthread_cond_signal(&cond); 
+pthread_cond_wait(&cond, &mutex)
+
+If this occurs, Process A will continue to wait for a wakeup signal. The mutex
+is to ensure that the condition variable changer keeps the wake-up queue consistent.
+
+3.1.2) When the waiting thread is blocked, it is waiting for a condition to be true. 
+Therefore, it is not doing any useful work with the mutex. Releasing the mutex lets
+other threads do useful work while the thread is blocking. 
+
+3.1.3) The way pthread_cond_wait is designed is to make sure that the caller thread 
+reacquires the thread when the condition variable becomes true and the mutex becomes free. 
+The mutex has be to be reacquired before starting again, because the caller thread wants 
+to (most likely) make changes to a shared variable, and after resuming execution, it 
+must reacquire the mutex to prevent race conditions. 
+
+3.1.4) Again, to prevent race conditions. Between the time you release the mutex and the time you call pthread_cond_wait, another thread may rush in and change the condiiton to be true, and you
+will have checked the wrong condition. For example, suppose the condiiton is, "A queue is empty."
+If you release the lock, thinking that the queue is empty, then call pthread_cond_wait, a thread
+can swoop in between these two function calls, and insert an item to a now non-empty queue. 
+
+3.1.5) Yes, we can use another lock to help us perform the actions that pthread_cond_wait
+needs to perform. A second lock would lock the condition variable while the calling
+process releases the mutex (2nd argument to pthread_cond_wait). Then it can release 
+its second lock and poll the condition variable and first mutex until they are both 
+available, whereby
+it uses the second lock again to atomically perform the checking of the condition variable
+and to reacquire the mutex. 
+

@@ -1,0 +1,38 @@
+Name: Anderson Huang
+UCLA ID: 104299133
+
+
+-------------------------------------------------------------------------------
+
+Response to Exercise 1: sys_getpid() will have returned the correct value. 
+Changing the run call to a schedule call will let the scheduler decide 
+what process to run when until finally, the original process gets its turn
+again. Each process has its own copy of all the registers, and recall 
+that the process id was saved in the %eax register. Because of this, 
+when the original process runs again, context switches and the current variable, which points to the current process descriptor, reloads all the
+original process's registers. When the process finishes running, the right
+PID is returned. 
+
+Response to Exercise 2: See implementation in code 
+
+Response to Exercise 3: To implement blocking instead of polling, I added a
+new field to the process structure called p_waitid, which holds the value of
+the process descriptor that the process is waiting on (if any). I changed
+the INT_SYS_WAIT case to change the state of the process doing the waiting 
+to a blocked state, as well as update that process's p_waitid field. 
+Lastly, when a process that is being waited on wants to exit, I made sure
+to change the state of the process waiting on that process to runnable again.
+This process is the one with the p_waitid equal to the process running, and
+one that is also BLOCKED. 
+
+Response to Exercise 4: There is already code in mpos-app2.c that iterates
+through the proc_array. This calls sys_wait. To fix this, we need to go back 
+to the INT_SYS_WAIT case in mpos-kern.c. In this section, under the case
+where the process that needs to be waited on is a zombie, change the status
+back to EMPTY. 
+
+Anything else you'd like us to know:
+
+
+
+Extra credit exercises:

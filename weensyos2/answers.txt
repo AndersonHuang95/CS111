@@ -1,0 +1,81 @@
+Name: Anderson Huang
+UCLA ID: 104299133
+
+Collaborators: Marvin McClain Jr. 
+
+-------------------------------------------------------------------------------
+
+Response to Exercise 1: 
+
+The name of the scheduling algorithm is: 
+
+First Come First Serve(FCFS) - This algorithm is not really Round Robin! It seems like its Round Robin
+because each process runs schedos-1.c's source code (which yields after printing one character). However, 
+the actual scheduling algorithm in schedos-kern.c services processes in a first-come-first-serve basis. 
+
+********************************************
+(Exercise 2 is a coding exercise)
+
+Done. Pid is used as the priority in this case. 
+
+********************************************
+Response to Exercise 3:
+
+Average turnaround time for scheduling_algorithm 0: 1278.5 (time units)
+Process 1: 320 x 4 -3
+Process 2: 320 x 4 -2
+Process 3: 320 x 4 -1
+Process 4: 320 x 4 
+
+Average turnaround time for scheduling_algorithm 1: 800 (time units)
+Process 1: 320 
+Process 2: 320 x 2 
+Process 3: 320 x 3
+Process 4: 320 x 4
+
+Average wait time for scheduling_algorithm 0: 1.5 (time units)
+
+Average wait time for scheduling_algorithm 1: 480 (time units)
+
+********************************************
+Exercise 4:
+
+Did you complete Exercise 4A, Exercise 4B, or both for extra credit?
+
+For 4A: We modified some global variables, and made a syscall sys_priority to change priorities. 
+We added a new field in the process descriptor and readded yield() to the schedos-1.c source code.
+
+The function works as follows: 
+Iterate through the process array, and set the priority level to the process id with the lowest priority. Then, check the next pid, and if its equal in priority to the previous one, run that one. This will create a loop until all processes are tended to, while alternating those with same the priorities. 
+
+For 4B: We added another sys call, sys_share that allows a process to set its "share" on process
+time. We also implemented the interrupt case in the schedos-kern.c source code. This is a simple 
+assignment to a process descriptor variable. For the scheduler implementation, we let a single
+process run until it has used up all its shares; we monitor this by using another process 
+descriptor variable that counts up until the "share". It resets, and then yields to another 
+process. 
+********************************************
+Exercise 5:
+
+The first clock interrupt occurs during the execution of process 4. Looking at the figure closely, one sees that the 20th character printed out is 1 instead of a 4. In a perfect Round Robin scheduler in this lab, each process would print a character and then switch to the next process. However, the scheduler preempted the fourth process and it did not get a chance to print
+out its character. 
+
+********************************************
+(Exercise 6 is a coding exercise)
+
+We made a new system call to print chars to console atomically, so clock interrupts would not 
+produce any race conditions. The atomic operation ensures the printing of the character occurs 
+to completion even in the case of a timer interrupt. To do this, we added a new interrupt number
+in schedos.h, added a new system call to schedos-app.h, implemented the system call in sched-kern.c, and replaced all instances of printing with the new atomic print system call.
+
+********************************************
+Anything else you'd like us to know:
+
+Extra credit exercises:
+
+Exercise 7: 
+
+We implemented lottery scheduling by using a simple random number generator documented online. We couldn't figure out how to use rand_cycle_counter, so this 
+was the best we could do. In doing so, we made an array of tickets. Each ticket corresponds to an id of a valid process. If the lottery 
+scheduler is chosen, it randomly selects a ticket. Unfortunately, the random number generator is not really random, because the seeds for the generator
+are the same every time, unless the user manually changes them. 

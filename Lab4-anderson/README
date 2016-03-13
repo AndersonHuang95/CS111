@@ -1,0 +1,44 @@
+CS111 Lab 4 - Synchronization 
+Name: Anderson Huang 
+UID: 104299133
+
+All parts and deliverables completed. 
+
+Part 1: addtest
+
+	All functionalities are implemented correctly. The program supports four long options, --yield, --iterations, --threads, and --sync.
+	If running the program with more than one thread without synchronization options, the program will give wrong results. 
+	The purpose of this module is to show that multi-threaded performance causes correctness issues, even to a very simple counter. 
+	--sync has three options that correctly use multi-threaded performance. --sync=m protects access to shared variables with mutexes, 
+	--sync=s uses spin locks, and --sync=c uses a bulit-in function __sync_val_compare_and_swap (not locking). 
+
+Part 2: sltest
+
+	All functionalities are implemented correctly. This program supports all the options addtest does in addition to a new --lists option. 
+	The --yield option is also extended, because this module performs multi-threaded operations on a sorted linked list. --yield=[ids] will
+	pause execution whilst in the middle of either inserting, deleting, or looking up an item in the list. Synchronization is even more rampant
+	in this program. Only two synchronized options are available to achieve correct behavior in this program, which are mutexes and spin locks. 
+
+answers.txt
+
+	Answers to all questions in the spec are in this file. 
+
+CS111Lab4Data.pdf 
+
+	All graphs required in the spec are described in this file. Some general trends are that
+		* For single-threaded runs, increasing the number of iterations generally reduces average costs per operation. For low numbers of iterations, 
+		it is evident that creating a thread takes more time than the actual useful operations the addtest module or sltest module needs to perform. 
+		* For multi-threaded runs, increasing the number of threads while keeping the number of iterations constant increases the cost per 
+		operation. This trend is due to race conditions. The price to pay for correctness is performance!
+
+Note: 
+	
+	The Makefile for sltest is compiled with the -w flag (no warnings). The warnings that are suppresed are 
+		* warning: suggest parentheses around assignment used as truth value
+		* warning: passing argument 1 of ‘free’ discards qualifiers from pointer target type; expected ‘void *’ but argument is of type ‘volatile int *’
+
+	The warnings are innocuous and do not affect program performance or correctness. Take out the -w flag if you wish you see the warnings for yourself. 
+	It seems the compiler throws a warning when passing a volatile pointer to the free() function. 
+
+
+
